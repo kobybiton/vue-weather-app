@@ -1,28 +1,53 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <NavBar />
+    <router-view />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    import NavBar from '@/components/NavBar.vue'; // import component
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: "App",
+        components: { // and register it
+            NavBar
+        }
+    }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import url('https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400&display=swap&subset=cyrillic');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  max-height: 100vh;
+}
+
+a {
+  color: #153B50;
+  text-decoration-color: rgba($color: #153B50, $alpha: 0.5);
+  transition: all 0.3s ease;
+
+  &:hover {
+    text-decoration-color: #153B50;
+  }
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.nav__link {
+  &:not(:last-child) {
+    margin-right: 15px;
+  }
 }
 </style>
