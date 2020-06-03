@@ -23,7 +23,6 @@ export default new Vuex.Store({
                     state.defaultResponse.push(responses);
                     state.defaultLocation = responses[0].data[0]; // set defaultWeather obj in state to real weather obj
                     responses[1].data.forEach(temp => state.defaultCurrentWeather = temp.Temperature.Imperial);
-                    //state.defaultCurrentWeather = responses[1].data[0]; // set defaultWeather obj in state to real weather obj
                     responses[2].data.DailyForecasts.forEach(day => day.Date = moment(day.Date).format('dddd'));
                     state.defaultDailyForecast = responses[2].data.DailyForecasts;
                     state.dataIsRecived = true; // mark that data was recived
