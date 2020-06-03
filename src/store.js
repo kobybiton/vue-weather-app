@@ -13,15 +13,20 @@ export default new Vuex.Store({
         defaultCurrentWeather: {},
         defaultDailyForecast: {},
         defaultResponse: [],
-        dataIsRecived: false
+        dataIsRecived: false,
+        toggleFavorites: false,
+        buttonText: 'Add To Favorites'
     },
     mutations: { // change state from here
         UPDATE_WEATHER(state) {
             service
                 .getWeather() // call the function from service.js that returns the data from API
                 .then(axios.spread((...responses) => { // if the response was get
-                    state.defaultResponse.push(responses);
+                    if(state.defaultResponse.length === 0) {
+                        state.defaultResponse.push(responses);
+                    }
                     state.defaultLocation = responses[0].data[0]; // set defaultWeather obj in state to real weather obj
+                    state.defaultLocation.favorite = false;
                     responses[1].data.forEach(temp => state.defaultCurrentWeather = temp.Temperature.Imperial);
                     responses[2].data.DailyForecasts.forEach(day => day.Date = moment(day.Date).format('dddd'));
                     state.defaultDailyForecast = responses[2].data.DailyForecasts;

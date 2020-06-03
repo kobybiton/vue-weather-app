@@ -2,10 +2,7 @@
 
     <div class="container">
         <div class="row form">
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" v-on:keydown.enter.prevent="searchCity" v-model="inputSearch" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" @click.prevent="searchCity" type="button">Search</button>
-            </form>
+            <search-city />
         </div>
         <div class="row current-city">
             <div class="col-md-2 col-md-offset-2">
@@ -13,6 +10,7 @@
                 <div class="temp">{{ defaultCurrentWeather.Value }}&deg; <small>{{ defaultCurrentWeather.Unit }}</small></div>
             </div>
         </div>
+        <add-to-favorites />
         <div class="row daily-weather">
             <div class="col-md-2 col-md-offset-2" v-bind:key="index" v-for="(day, index) in defaultDailyForecast">
                 <div class="weather">
@@ -32,18 +30,11 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import moment from 'moment';
-    import { AUTO_COMPLETE_LOCATION, CURRENT_CONDITION,  DAILY_FRECASTS} from "@/constants";
+    import SearchCity from "./SearchCity";
+    import AddToFavorites from "./AddToFavorites";
 
     export default {
-        data: function () {
-            return {
-                inputSearch: '',
-                city: '',
-                response: []
-            }
-        },
+        components: {AddToFavorites, SearchCity},
         computed: {
             defaultLocation() {
                 return this.$store.state.defaultLocation // gets weather state from Vuex store
@@ -56,56 +47,8 @@
             }
         },
         created() {
-            this.$store.dispatch("updateWeather"); // dispatch "updateWeather" when component is created
-        },
-        updated() {
-            this.response = this.$store.state.defaultResponse
-        },
-        methods: {
-            searchCity() {
-                let $this = this;
-                $this.inputSearch = $this.inputSearch.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
-                console.log($this.inputSearch)
-                $this.response.forEach(value => {
-                    if($this.inputSearch === value[0].data[0].LocalizedName) {
-                        $this.city = value[0].data[0].LocalizedName;
-                    }
-                });
-                console.log($this.city)
-
-                if($this.city !== $this.inputSearch) {
-                    const AUTO_COMPLETE_LOCATION_REQUEST = axios.get(`${AUTO_COMPLETE_LOCATION}&q=${$this.inputSearch}`);
-                    AUTO_COMPLETE_LOCATION_REQUEST.then(location => {
-                        const LOCATION_KEY = location.data[0].Key
-                        const CURRENT_CONDITION_REQUEST = axios.get(`${CURRENT_CONDITION}&locationkey=${LOCATION_KEY}`);
-                        const DAILY_FRECASTS_REQUEST = axios.get(`${DAILY_FRECASTS}&locationkey=${LOCATION_KEY}`);
-                        axios.all([AUTO_COMPLETE_LOCATION_REQUEST, CURRENT_CONDITION_REQUEST, DAILY_FRECASTS_REQUEST])
-                            .then(responses => {
-                                $this.response.push(responses)
-                                console.log($this.response, 'push')
-                                $this.$store.state.defaultLocation = responses[0].data[0];
-                                console.log($this.$store.state.defaultLocation, '$this.$store.state.defaultLocation')
-                                responses[1].data.forEach(temp => $this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
-                                responses[2].data.DailyForecasts.forEach(day => day.Date = moment(day.Date).format('dddd'));
-                                $this.$store.state.defaultDailyForecast = responses[2].data.DailyForecasts;
-                            });
-                    });
-                } else {
-                    getLocalData();
-                }
-                function getLocalData() {
-                    console.log($this.response, '$this.response')
-                    $this.response.forEach(value => {
-                        console.log($this.city, 'updateStore city')
-                        console.log(value[0].data[0], 'updateStore value')
-                        if($this.city === value[0].data[0].LocalizedName) {
-                            $this.$store.state.defaultLocation = value[0].data[0];
-                            console.log($this.$store.state.defaultLocation, '$this.$store.state.defaultLocation')
-                            value[1].data.forEach(temp => $this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
-                            $this.$store.state.defaultDailyForecast = value[2].data.DailyForecasts;
-                        }
-                    });
-                }
+            if(this.$store.state.defaultResponse.length === 0) {
+                this.$store.dispatch("updateWeather"); // dispatch "updateWeather" when component is created
             }
         }
     }

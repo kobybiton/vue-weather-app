@@ -6,15 +6,6 @@ const DAILY_FRECASTS_REQUEST = axios.get(`${DAILY_FRECASTS}&locationkey=215854`)
 
 const apiClient = axios.all([AUTO_COMPLETE_LOCATION_REQUEST, CURRENT_CONDITION_REQUEST, DAILY_FRECASTS_REQUEST]);
 
-/*const apiClient = axios.create({ // create promise
-    baseURL: AUTO_COMPLETE_LOCATION,
-    withCredentials: false, // CORS
-    headers: { // some HTTP headers
-        Accept: "application/json",
-        "Content-Type": "application/json"
-    }
-});*/
-
 export default {
     getWeather() { // function that is used in store.js 👆
         return apiClient;

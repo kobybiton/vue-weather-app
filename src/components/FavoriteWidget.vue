@@ -1,98 +1,44 @@
 <template>
-<!--   <div>
-    <div v-if="this.$store.state.dataIsRecived" class="weather-widget"> 
-      <p class="weather-widget__city">{{ weather.city_name }}</p>
-      <h2 class="weather-widget__temp">{{ weather.temp }}<span>°C</span></h2>
-      <p class="weather-widget__status">{{ weather.weather.description }}</p>
-    </div>
-    <div v-else class="weather-widget"> 
-      <img src="spinner.svg" alt="">
-    </div>
-  </div> -->
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-2 col-md-offset-2">
-            <div class="weather">
-                <div class="current">
-                    <div class="info">
-                        <div>&nbsp;</div>
-                        <div class="city"><small><small>CITY:</small></small> {{ weather.LocalizedName }}</div>
-                        <div class="temp">67&deg; <small>C</small></div>
-                        <div class="wind">{{ weather.WeatherText }}</div>
-                        <div>&nbsp;</div>
+    <div class="container">
+        <div class="row daily-weather" v-if="this.favorites.length > 0">
+            <div class="col-md-2 col-md-offset-2" v-bind:key="index" v-for="(value, index) in this.favorites">
+                <div class="weather">
+                    <div class="current">
+                        <div class="info">
+                            <div>&nbsp;</div>
+                            <div class="city">{{ value[0].data[0].LocalizedName }}</div>
+                            <div class="temp">{{ value[1].data[0].Temperature.Imperial.Value }} &deg; <small>{{ value[1].data[0].Temperature.Imperial.Unit }}</small></div>
+                            <div>{{ value[1].data[0].WeatherText }}</div>
+                            <div>&nbsp;</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-md-offset-2">
-            <div class="weather">
-                <div class="current">
-                    <div class="info">
-                        <div>&nbsp;</div>
-                        <div class="city"><small><small>CITY:</small></small> {{ weather.LocalizedName }}</div>
-                        <div class="temp">67&deg; <small>C</small></div>
-                        <div class="wind">{{ weather.WeatherText }}</div>
-                        <div>&nbsp;</div>
-                    </div>
-                </div>
-            </div>
+        <div class="message" v-else>
+            Add Favorites
         </div>
-        <div class="col-md-2 col-md-offset-2">
-            <div class="weather">
-                <div class="current">
-                    <div class="info">
-                        <div>&nbsp;</div>
-                        <div class="city"><small><small>CITY:</small></small> {{ weather.LocalizedName }}</div>
-                        <div class="temp">67&deg; <small>C</small></div>
-                        <div class="wind">{{ weather.WeatherText }}</div>
-                        <div>&nbsp;</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 col-md-offset-2">
-            <div class="weather">
-                <div class="current">
-                    <div class="info">
-                        <div>&nbsp;</div>
-                        <div class="city"><small><small>CITY:</small></small> {{ weather.LocalizedName }}</div>
-                        <div class="temp">67&deg; <small>C</small></div>
-                        <div class="wind">{{ weather.WeatherText }}</div>
-                        <div>&nbsp;</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 col-md-offset-2">
-            <div class="weather">
-                <div class="current">
-                    <div class="info">
-                        <div>&nbsp;</div>
-                        <div class="city"><small><small>CITY:</small></small> {{ weather.LocalizedName }}</div>
-                        <div class="temp">67&deg; <small>C</small></div>
-                        <div class="wind">{{ weather.WeatherText }}</div>
-                        <div>&nbsp;</div>
-                    </div>
-                </div>
-            </div>
-        </div>                                
     </div>
-</div>
 
 </template>
 
 <script>
-  export default {
-    computed: {
-      weather() {
-        return this.$store.state.weather // gets weather state from Vuex store
-      }
-    },
-    created() {
-      this.$store.dispatch("updateWeather"); // dispatch "updateWeather" when component is created
+    export default {
+        data: function () {
+            return {
+                favorites: []
+            }
+        },
+        created() {
+            this.$store.state.defaultResponse.forEach(value =>{
+                 if(value[0].data[0].favorite === true) {
+                     this.favorites.push(value)
+                 }
+            });
+            console.log(this.favorites, 'favorites')
+        }
     }
-  }
 </script>
 
 <style>

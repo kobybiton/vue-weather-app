@@ -1,4 +1,4 @@
-const API_KEY = "55QZZs0gAEA4p4uZArg7r2O6BekrLdY1";
+const API_KEY = "NdKaK3uxQAmqwWXvLvRMgUyCswWLJF87\n";
 const AUTO_COMPLETE_LOCATION = `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${API_KEY}`;
 const DAILY_FRECASTS = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/search?apikey=${API_KEY}`;
 const CURRENT_CONDITION = `http://dataservice.accuweather.com/currentconditions/v1/search?apikey=${API_KEY}`;
