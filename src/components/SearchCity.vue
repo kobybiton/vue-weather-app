@@ -29,7 +29,7 @@
                     $this.inputSearch = $this.inputSearch.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
                     let enLettersOnly = /^[a-z A-Z]+$/;
                     if(!enLettersOnly.test($this.inputSearch)) {
-                        alert('only english letters are allowed!');
+                        this.$alert('only english letters are allowed!');
                         return;
                     }
                     $this.response.forEach(value => {
@@ -56,7 +56,7 @@
                                         $this.$store.state.defaultDailyForecast = responses[2].data.DailyForecasts;
                                     });
                             } else {
-                                alert('please enter a correct city!')
+                                this.$alert('please enter a correct city!')
                             }
                         })
                     } else {
@@ -65,7 +65,7 @@
                         this.$store.state.buttonText = 'Remove From Favorites'
                     }
                 } else {
-                    alert('search field is empty!');
+                    this.$alert('search field is empty!');
                 }
 
                 function getLocalData() {
@@ -77,14 +77,6 @@
                         }
                     });
                 }
-/*                this.$store.state.defaultResponse.forEach(value =>{
-                    console.log(value, 'value')
-                    if(value[0].data[0].favorite === false) {
-                        this.$store.state.buttonText = 'Add To Favorites';
-                    } else {
-                        this.$store.state.buttonText = 'Remove From Favorites'
-                    }
-                });*/
             }
         },
         updated() {

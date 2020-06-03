@@ -4,8 +4,9 @@ import router from "./router"; // Router config
 import store from "./store"; // Store config
 import 'bootstrap'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import VueSimpleAlert from "vue-simple-alert";
 
-//import "normalize.css"; // Normalize.css lib to reset default styles
+Vue.use(VueSimpleAlert);
 
 Vue.config.productionTip = false;
 

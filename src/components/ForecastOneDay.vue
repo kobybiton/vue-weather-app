@@ -34,7 +34,10 @@
     import AddToFavorites from "./AddToFavorites";
 
     export default {
-        components: {AddToFavorites, SearchCity},
+        components: {
+            AddToFavorites,
+            SearchCity
+        },
         computed: {
             defaultLocation() {
                 return this.$store.state.defaultLocation // gets weather state from Vuex store
