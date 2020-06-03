@@ -7,7 +7,9 @@
                     <div class="current">
                         <div class="info">
                             <div>&nbsp;</div>
-                            <div class="city">{{ value[0].data[0].LocalizedName }}</div>
+                            <router-link to="/" class="nav__link">
+                                <div class="city" @click="showInHomePage(value)">{{ value[0].data[0].LocalizedName }}</div>
+                            </router-link>
                             <div class="temp">{{ value[1].data[0].Temperature.Imperial.Value }} &deg; <small>{{ value[1].data[0].Temperature.Imperial.Unit }}</small></div>
                             <div>{{ value[1].data[0].WeatherText }}</div>
                             <div>&nbsp;</div>
@@ -16,6 +18,7 @@
                 </div>
             </div>
         </div>
+
         <div class="message" v-else>
             Add Favorites
         </div>
@@ -37,6 +40,18 @@
                  }
             });
             console.log(this.favorites, 'favorites')
+        },
+        methods: {
+            showInHomePage(data) {
+                this.favorites.forEach(value =>{
+                    if(value[0].data[0].LocalizedName === data[0].data[0].LocalizedName) {
+                        console.log(data, 'data')
+                        this.$store.state.defaultLocation = data[0].data[0];
+                        data[1].data.forEach(temp => this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
+                        this.$store.state.defaultDailyForecast = data[2].data.DailyForecasts;
+                    }
+                });
+            }
         }
     }
 </script>

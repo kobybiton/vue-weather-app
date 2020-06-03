@@ -27,7 +27,7 @@
                 if($this.inputSearch.length > 0) {
 
                     $this.inputSearch = $this.inputSearch.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
-                    let enLettersOnly = /^[a-zA-Z]+$/;
+                    let enLettersOnly = /^[a-z A-Z]+$/;
                     if(!enLettersOnly.test($this.inputSearch)) {
                         alert('only english letters are allowed!');
                         return;
