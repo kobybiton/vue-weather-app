@@ -53,6 +53,9 @@
                         this.$store.state.defaultDailyForecast = data[2].data.DailyForecasts;
                     }
                 });
+                this.$store.state.buttonText = 'Remove From Favorites';
+                this.$store.state.defaultLocation.favorite = true;
+                this.$store.state.toggleFavorites = true;
             }
         }
     }
