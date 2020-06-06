@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar-light bg-light navbar-right">
-    <button class="btn btn-outline-success" type="button">
+    <button class="btn btn-primary" type="button">
       <router-link to="/" class="nav__link">Home</router-link>
     </button>
-    <button class="btn btn-outline-success" type="button">
+    <button class="btn btn-info" type="button">
       <router-link to="/favorites" class="nav__link">Favorites</router-link>
     </button>
   </nav>
@@ -19,7 +19,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
 
   .navbar-right {
       position: relative;
@@ -28,6 +28,19 @@ export default {
       align-items: center;
       justify-content: flex-end;
       padding: .5rem 1rem;
+  }
+
+  .nav__link {
+    color: #fff;
+    text-decoration: none;
+    &:hover {
+      color: #fafafa;
+      text-decoration: none;
+    }
+  }
+
+  .btn {
+    border-radius: 0 !important;
   }
 
 </style>

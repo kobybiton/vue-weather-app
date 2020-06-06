@@ -9,8 +9,8 @@
                 <div class="city">{{ defaultLocation.LocalizedName }}</div>
                 <div class="temp">{{ defaultCurrentWeather.Value }}&deg; <small>{{ defaultCurrentWeather.Unit }}</small></div>
             </div>
+            <add-to-favorites />
         </div>
-        <add-to-favorites />
         <div class="row daily-weather">
             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" v-bind:key="index" v-for="(day, index) in defaultDailyForecast">
                 <article class="widget">
@@ -146,7 +146,12 @@
     }
 
     .row.current-city{
-        justify-content: left;
+        justify-content: space-around;
+        align-items: center;
+
+        button {
+            height: 50px;
+        }
     }
 
     .weather{

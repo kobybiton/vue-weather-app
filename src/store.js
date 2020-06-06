@@ -32,7 +32,6 @@ export default new Vuex.Store({
                 }))
                 .catch(error => { // if there was an error
                     console.log("There was an error:", error); // log it
-                    state.dataIsRecived = false; // and mark that data wasn't recived
                 });
         }
     },

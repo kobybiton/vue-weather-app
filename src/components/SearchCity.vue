@@ -1,13 +1,19 @@
 <template>
-    <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" v-on:keydown.enter.prevent="searchCity" v-model="inputSearch" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-primary my-2 my-sm-0" @click.prevent="searchCity" type="button">Search</button>
-    </form>
+    <div class="search-box">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" v-on:keydown.enter.prevent="searchCity" v-model="inputSearch" type="search" placeholder="Search" aria-label="Search">
+            <div class="loader">
+                <wave-spin v-bind:v-model="loader" v-show="loader"></wave-spin>
+            </div>
+            <button class="btn btn-primary my-2 my-sm-0" @click.prevent="searchCity" type="button">Search</button>
+        </form>
+    </div>
 </template>
 
 <script>
     import axios from "axios";
     import moment from 'moment';
+    import WaveSpin from 'vue-loading-spinner/src/components/Wave';
     import { AUTO_COMPLETE_LOCATION, CURRENT_CONDITION,  DAILY_FORECASTS} from "@/constants";
 
     export default {
@@ -17,15 +23,19 @@
             return {
                 inputSearch: '',
                 currentLocation: '',
-                cachedData: []
+                cachedData:[],
+                loader: false
             }
+        },
+        components: {
+            WaveSpin
         },
         methods: {
             searchCity() {
 
                 let $this = this;
                 if($this.inputSearch.length > 0) {
-
+                    $this.loader = true;
                     $this.inputSearch = $this.inputSearch.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
                     const enLettersOnly = /^[a-z A-Z]+$/;
                     if(!enLettersOnly.test($this.inputSearch)) {
@@ -40,7 +50,6 @@
 
                     // get local data or ajax to api
                     if($this.currentLocation !== $this.inputSearch) {
-
                         const AUTO_COMPLETE_LOCATION_REQUEST = axios.get(`${AUTO_COMPLETE_LOCATION}&q=${$this.inputSearch}`);
                         AUTO_COMPLETE_LOCATION_REQUEST.then(location => {
                             if (location.data.length > 0) {
@@ -49,6 +58,7 @@
                                 const DAILY_FORECASTS_REQUEST = axios.get(`${DAILY_FORECASTS}&locationkey=${LOCATION_KEY}`);
                                 axios.all([AUTO_COMPLETE_LOCATION_REQUEST, CURRENT_CONDITION_REQUEST, DAILY_FORECASTS_REQUEST])
                                     .then(responses => {
+                                        $this.loader = false;
                                         $this.cachedData.push(responses)
                                         $this.$store.state.defaultLocation = responses[0].data[0];
                                         $this.$store.state.defaultLocation.favorite = false;
@@ -62,7 +72,11 @@
                             }
                         })
                     } else {
-                        getLocalData();
+                        setTimeout(() => {
+                            $this.loader = false;
+                            getLocalData();
+                        }, 500);
+
                     }
                 } else {
                     this.$alert('search field is empty!');
@@ -80,13 +94,10 @@
                 }
 
                 function updateFavorites() {
-                    console.log($this.$store.state.defaultLocation.favorite, '$this.$store.state.defaultLocation.favorite')
                         if($this.$store.state.defaultLocation.favorite === true) {
-                            console.log('true')
                             $this.$store.state.toggleFavorites = true;
                             $this.$store.state.buttonText = 'Remove From Favorites';
                         } else {
-                            console.log('false')
                             $this.$store.state.toggleFavorites = false;
                             $this.$store.state.buttonText =  'Add To Favorites';
                         }
@@ -99,6 +110,24 @@
     }
 </script>
 
-<style scoped>
+<style>
+    .spinner {
+        position: absolute;
+        top: -5px;
+        right: 90px;
+    }
 
+    .spinner > div[data-v-21bfcd7c]{
+        background-color: lightskyblue;
+    }
+
+    .form-inline {
+        position: relative;
+    }
+
+    @media screen and (max-width: 575px) {
+        .spinner {
+            right: 10px;
+        }
+    }
 </style>

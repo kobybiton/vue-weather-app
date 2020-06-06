@@ -9,7 +9,7 @@
 
     export default {
         name: "Home",
-        components: { // and register it
+        components: {
             ForecastOneDay
         }
     }

@@ -24,7 +24,7 @@
         </div>
 
         <div class="message" v-else>
-            <h1>Favorites</h1>
+            <h5>Your favorites page is empty, Use the "Add To Favorites" button in home page</h5>
         </div>
     </div>
 
@@ -124,6 +124,16 @@
 
     .weather .future .day p{
         font-size: 28px;
+    }
+
+    h1 {
+        text-align: center;
+        color: lightskyblue;
+    }
+
+    .message h5{
+        text-align: center;
+        color: lavender;
     }
 
 </style>
