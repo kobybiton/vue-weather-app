@@ -1,12 +1,16 @@
 <template>
 
-    <div class="container">
+    <div class="container-fluid">
+        <h1>My Favorites</h1>
         <div class="row daily-weather" v-if="this.favorites.length > 0">
-            <div class="col-md-2 col-md-offset-2" v-bind:key="index" v-for="(value, index) in this.favorites">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" v-bind:key="index" v-for="(value, index) in this.favorites">
                 <div class="weather">
                     <div class="current">
                         <div class="info">
                             <div>&nbsp;</div>
+                            <div class="weatherIcon">
+                                <img v-bind:src="`https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/${value[1].data[0].WeatherIcon < 10? `0${value[1].data[0].WeatherIcon}`:value[1].data[0].WeatherIcon}-s.png`" alt="">
+                            </div>
                             <router-link to="/" class="nav__link">
                                 <div class="city" @click="showInHomePage(value)">{{ value[0].data[0].LocalizedName }}</div>
                             </router-link>
@@ -20,7 +24,7 @@
         </div>
 
         <div class="message" v-else>
-            Add Favorites
+            <h1>Favorites</h1>
         </div>
     </div>
 
@@ -39,13 +43,11 @@
                      this.favorites.push(value)
                  }
             });
-            console.log(this.favorites, 'favorites')
         },
         methods: {
             showInHomePage(data) {
                 this.favorites.forEach(value =>{
                     if(value[0].data[0].LocalizedName === data[0].data[0].LocalizedName) {
-                        console.log(data, 'data')
                         this.$store.state.defaultLocation = data[0].data[0];
                         data[1].data.forEach(temp => this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
                         this.$store.state.defaultDailyForecast = data[2].data.DailyForecasts;

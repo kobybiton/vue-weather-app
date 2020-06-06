@@ -21,7 +21,9 @@
 
 body {
   font-family: 'Montserrat', sans-serif;
-  max-height: 100vh;
+  background-image: url("assets/weather.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 a {

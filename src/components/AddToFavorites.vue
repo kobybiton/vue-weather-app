@@ -1,6 +1,6 @@
 <template>
     <div class="row add-to-favorites">
-        <button class="btn btn-outline-success my-2 my-sm-0" @click.prevent="addOrRemoveFavorites" type="button">{{ this.$store.state.buttonText }}</button>
+        <button class="btn btn-info my-2 my-sm-0" @click.prevent="addOrRemoveFavorites" type="button">{{ this.$store.state.buttonText }}</button>
     </div>
 </template>
 

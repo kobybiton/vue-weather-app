@@ -1,28 +1,30 @@
 <template>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row form">
             <search-city />
         </div>
         <div class="row current-city">
-            <div class="col-md-2 col-md-offset-2">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                 <div class="city">{{ defaultLocation.LocalizedName }}</div>
                 <div class="temp">{{ defaultCurrentWeather.Value }}&deg; <small>{{ defaultCurrentWeather.Unit }}</small></div>
             </div>
         </div>
         <add-to-favorites />
         <div class="row daily-weather">
-            <div class="col-md-2 col-md-offset-2" v-bind:key="index" v-for="(day, index) in defaultDailyForecast">
-                <div class="weather">
-                    <div class="current">
-                        <div class="info">
-                            <div>&nbsp;</div>
-                            <div class="city">{{ day.Date }}</div>
-                            <div class="temp">{{ day.Temperature.Maximum.Value }} &deg; <small>{{ day.Temperature.Maximum.Unit }}</small></div>
-                            <div>&nbsp;</div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" v-bind:key="index" v-for="(day, index) in defaultDailyForecast">
+                <article class="widget">
+                    <div class="weatherIcon">
+                        <img v-bind:src="`https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/${day.Day.Icon < 10? `0${day.Day.Icon}`:day.Day.Icon}-s.png`" alt="">
+                    </div>
+                    <div class="weatherInfo">
+                        <div class="temperature"><span>{{ day.Temperature.Maximum.Value }} &deg;{{ day.Temperature.Maximum.Unit }}</span></div>
+                        <div class="description">
+                            <div class="weatherCondition">{{ day.Day.IconPhrase }}</div>
                         </div>
                     </div>
-                </div>
+                    <div class="date">{{ day.Date }}</div>
+                </article>
             </div>
         </div>
     </div>
@@ -53,14 +55,93 @@
             if(this.$store.state.defaultResponse.length === 0) {
                 this.$store.dispatch("updateWeather"); // dispatch "updateWeather" when component is created
             }
-        }
+        },
     }
 </script>
 
-<style>
+<style lang="scss">
+
+    @import url(https://fonts.googleapis.com/css?family=Poiret+One);
+    @import url(https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css);
+
+    $border-radius: 20px;
+
+    body {
+        background-color: #A64253;
+        font-family: Poiret One;
+    }
+
+    .widget {
+
+        .weatherIcon{
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            font-family: weathericons;
+            font-size: 70px;
+            margin: 20px auto 0;
+            text-align: center;
+            background: #FAFAFA;
+
+            i{
+                padding-top: 30px;
+            }
+        }
+
+        .weatherInfo{
+            background: lightblue;
+            align-items: center;
+            color: white;
+            height: 150px;
+
+            .temperature{
+                flex: 0 0 40%;
+                width: 100%;
+                font-size: 40px;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            .description{
+
+                .weatherCondition{
+                    text-transform: uppercase;
+                    font-size: 22px;
+                    font-weight: 100;
+                    text-align: center;
+                }
+
+                .place{
+                    font-size: 15px;
+                }
+            }
+        }
+
+        .date{
+            flex: 0 0 30%;
+            height: 40%;
+            background: lightskyblue;
+            border-bottom-right-radius: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            color: white;
+            font-size: 25px;
+            font-weight: 800;
+        }
+    }
+
+    p{
+        position: fixed;
+        bottom: 0%;
+        right: 2%;
+        a{
+            text-decoration: none;
+            color: #E4D6A7;
+            font-size: 10px;
+        }
+    }
 
     .daily-weather{
-        border: 1px solid #ccc;
         padding: 50px;
     }
 
@@ -92,12 +173,14 @@
         flex-grow: 2;
     }
 
-    .weather .current .info .city{
-        font-size: 26px;
+    .city{
+        font-size: 35px;
+        color: #fff;
     }
 
-    .weather .current .info .temp{
+    .temp{
         font-size: 56px;
+        color: aqua;
     }
 
     .weather .current .info .wind{
@@ -139,7 +222,7 @@
     }
 
     .row.form{
-        margin-bottom: 100px;
+        margin-bottom: 20px;
     }
 
 </style>

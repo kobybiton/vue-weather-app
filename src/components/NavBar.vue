@@ -4,7 +4,7 @@
       <router-link to="/" class="nav__link">Home</router-link>
     </button>
     <button class="btn btn-outline-success" type="button">
-      <router-link to="/favorites" class="nav__link">Favourits</router-link>
+      <router-link to="/favorites" class="nav__link">Favorites</router-link>
     </button>
   </nav>
 </template>
