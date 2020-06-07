@@ -9,9 +9,10 @@
         name: "AddToFavorites",
         methods: {
             addOrRemoveFavorites() {
+                // toggle favorites state
                 this.$store.state.toggleFavorites = !this.$store.state.toggleFavorites
                 this.$store.state.toggleFavorites ? this.$store.state.buttonText = 'Remove From Favorites': this.$store.state.buttonText =  'Add To Favorites';
-                this.$store.state.defaultLocation.favorite = this.$store.state.toggleFavorites;
+                this.$store.state.location.favorite = this.$store.state.toggleFavorites;
             }
         }
     }

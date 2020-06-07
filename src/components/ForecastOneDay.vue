@@ -6,13 +6,13 @@
         </div>
         <div class="row current-city">
             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                <div class="city">{{ defaultLocation.LocalizedName }}</div>
-                <div class="temp">{{ defaultCurrentWeather.Value }}&deg; <small>{{ defaultCurrentWeather.Unit }}</small></div>
+                <div class="city">{{ location.LocalizedName }}</div>
+                <div class="temp">{{ currentWeather.Value }}&deg; <small>{{ currentWeather.Unit }}</small></div>
             </div>
             <add-to-favorites />
         </div>
         <div class="row daily-weather">
-            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" v-bind:key="index" v-for="(day, index) in defaultDailyForecast">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" v-bind:key="index" v-for="(day, index) in dailyForecast">
                 <article class="widget">
                     <div class="weatherIcon">
                         <img v-bind:src="`https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/${day.Day.Icon < 10? `0${day.Day.Icon}`:day.Day.Icon}-s.png`" alt="">
@@ -40,19 +40,20 @@
             AddToFavorites,
             SearchCity
         },
+        // gets weather state from Vuex store
         computed: {
-            defaultLocation() {
-                return this.$store.state.defaultLocation // gets weather state from Vuex store
+            location() {
+                return this.$store.state.location
             },
-            defaultCurrentWeather() {
-                return this.$store.state.defaultCurrentWeather // gets weather state from Vuex store
+            currentWeather() {
+                return this.$store.state.currentWeather
             },
-            defaultDailyForecast() {
-                return this.$store.state.defaultDailyForecast // gets weather state from Vuex store
+            dailyForecast() {
+                return this.$store.state.dailyForecast
             }
         },
         created() {
-            if(this.$store.state.defaultResponse.length === 0) {
+            if(this.$store.state.cachedData.length === 0) {
                 this.$store.dispatch("updateWeather"); // dispatch "updateWeather" when component is created
             }
         },

@@ -9,7 +9,7 @@
 
     export default {
         name: "Favorites",
-        components: { // and register it
+        components: {
             FavoriteWidget
         }
     }

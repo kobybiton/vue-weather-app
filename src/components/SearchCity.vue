@@ -11,10 +11,7 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import moment from 'moment';
     import WaveSpin from 'vue-loading-spinner/src/components/Wave';
-    import { AUTO_COMPLETE_LOCATION, CURRENT_CONDITION,  DAILY_FORECASTS} from "@/constants";
 
     export default {
 
@@ -23,7 +20,6 @@
             return {
                 inputSearch: '',
                 currentLocation: '',
-                cachedData:[],
                 loader: false
             }
         },
@@ -38,63 +34,59 @@
                     $this.loader = true;
                     $this.inputSearch = $this.inputSearch.replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
                     const enLettersOnly = /^[a-z A-Z]+$/;
+
+                    // validate english letters
                     if(!enLettersOnly.test($this.inputSearch)) {
                         this.$alert('only english letters are allowed!');
+                        $this.loader = false;
                         return;
                     }
-                    $this.cachedData.forEach(value => {
-                        if ($this.inputSearch === value[0].data[0].LocalizedName) {
+
+                    $this.$store.state.cachedData.forEach(value => {
+                        if (value[0].data[0].LocalizedName.includes($this.inputSearch)) {
                             $this.currentLocation = value[0].data[0].LocalizedName;
                         }
                     });
 
-                    // get local data or ajax to api
-                    if($this.currentLocation !== $this.inputSearch) {
-                        const AUTO_COMPLETE_LOCATION_REQUEST = axios.get(`${AUTO_COMPLETE_LOCATION}&q=${$this.inputSearch}`);
-                        AUTO_COMPLETE_LOCATION_REQUEST.then(location => {
-                            if (location.data.length > 0) {
-                                const LOCATION_KEY = location.data[0].Key
-                                const CURRENT_CONDITION_REQUEST = axios.get(`${CURRENT_CONDITION}&locationkey=${LOCATION_KEY}`);
-                                const DAILY_FORECASTS_REQUEST = axios.get(`${DAILY_FORECASTS}&locationkey=${LOCATION_KEY}`);
-                                axios.all([AUTO_COMPLETE_LOCATION_REQUEST, CURRENT_CONDITION_REQUEST, DAILY_FORECASTS_REQUEST])
-                                    .then(responses => {
-                                        $this.loader = false;
-                                        $this.cachedData.push(responses)
-                                        $this.$store.state.defaultLocation = responses[0].data[0];
-                                        $this.$store.state.defaultLocation.favorite = false;
-                                        responses[1].data.forEach(temp => $this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
-                                        responses[2].data.DailyForecasts.forEach(day => day.Date = moment(day.Date).format('dddd'));
-                                        $this.$store.state.defaultDailyForecast = responses[2].data.DailyForecasts;
-                                        updateFavorites();
-                                    });
-                            } else {
+                    // get cached data or dispatch updateWeather
+                    if(!$this.currentLocation.includes($this.inputSearch)) {
+
+                        this.$store.dispatch("updateWeather", $this.inputSearch);
+                        // check if city exist
+                        setTimeout(() => {
+                            if($this.$store.state.isReceivedData === false) {
                                 this.$alert('please enter a correct city!')
                             }
-                        })
+                        }, 1000);
+
+                        setTimeout(() => {
+                            $this.loader = false;
+                        }, 1000);
+
                     } else {
                         setTimeout(() => {
                             $this.loader = false;
-                            getLocalData();
-                        }, 500);
+                            getCachedData();
+                        }, 1000);
 
                     }
                 } else {
                     this.$alert('search field is empty!');
                 }
 
-                function getLocalData() {
-                    $this.cachedData.forEach(value => {
+                function getCachedData() {
+                    $this.$store.state.cachedData.forEach(value => {
                         if ($this.currentLocation === value[0].data[0].LocalizedName) {
-                            $this.$store.state.defaultLocation = value[0].data[0];
-                            value[1].data.forEach(temp => $this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
-                            $this.$store.state.defaultDailyForecast = value[2].data.DailyForecasts;
+                            $this.$store.state.location = value[0].data[0];
+                            value[1].data.forEach(temp => $this.$store.state.currentWeather = temp.Temperature.Imperial);
+                            $this.$store.state.dailyForecast = value[2].data.DailyForecasts;
                         }
                     });
                     updateFavorites();
                 }
 
                 function updateFavorites() {
-                        if($this.$store.state.defaultLocation.favorite === true) {
+                        if($this.$store.state.location.favorite === true) {
                             $this.$store.state.toggleFavorites = true;
                             $this.$store.state.buttonText = 'Remove From Favorites';
                         } else {
@@ -102,10 +94,8 @@
                             $this.$store.state.buttonText =  'Add To Favorites';
                         }
                 }
+                $this.inputSearch = '';
             }
-        },
-        created() {
-            this.cachedData = this.$store.state.defaultResponse
         },
     }
 </script>

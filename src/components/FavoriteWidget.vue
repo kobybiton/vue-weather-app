@@ -38,7 +38,8 @@
             }
         },
         created() {
-            this.$store.state.defaultResponse.forEach(value =>{
+            // get favorites from cachedData
+            this.$store.state.cachedData.forEach(value =>{
                  if(value[0].data[0].favorite === true) {
                      this.favorites.push(value)
                  }
@@ -46,15 +47,16 @@
         },
         methods: {
             showInHomePage(data) {
+                // update state to get current location weather in home page
                 this.favorites.forEach(value =>{
                     if(value[0].data[0].LocalizedName === data[0].data[0].LocalizedName) {
-                        this.$store.state.defaultLocation = data[0].data[0];
-                        data[1].data.forEach(temp => this.$store.state.defaultCurrentWeather = temp.Temperature.Imperial);
-                        this.$store.state.defaultDailyForecast = data[2].data.DailyForecasts;
+                        this.$store.state.location = data[0].data[0];
+                        data[1].data.forEach(temp => this.$store.state.currentWeather = temp.Temperature.Imperial);
+                        this.$store.state.dailyForecast = data[2].data.DailyForecasts;
                     }
                 });
                 this.$store.state.buttonText = 'Remove From Favorites';
-                this.$store.state.defaultLocation.favorite = true;
+                this.$store.state.location.favorite = true;
                 this.$store.state.toggleFavorites = true;
             }
         }
