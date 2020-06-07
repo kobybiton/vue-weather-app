@@ -14,7 +14,7 @@
                             <router-link to="/" class="nav__link">
                                 <div class="city" @click="showInHomePage(value)">{{ value[0].data[0].LocalizedName }}</div>
                             </router-link>
-                            <div class="temp">{{ value[1].data[0].Temperature.Imperial.Value }} &deg; <small>{{ value[1].data[0].Temperature.Imperial.Unit }}</small></div>
+                            <div class="temp">{{ value[1].data[0].Temperature.Imperial.Value }}&deg; <small>{{ value[1].data[0].Temperature.Imperial.Unit }}</small></div>
                             <div>{{ value[1].data[0].WeatherText }}</div>
                             <div>&nbsp;</div>
                         </div>

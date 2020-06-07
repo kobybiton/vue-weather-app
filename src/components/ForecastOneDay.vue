@@ -18,7 +18,7 @@
                         <img v-bind:src="`https://apidev.accuweather.com/developers/Media/Default/WeatherIcons/${day.Day.Icon < 10? `0${day.Day.Icon}`:day.Day.Icon}-s.png`" alt="">
                     </div>
                     <div class="weatherInfo">
-                        <div class="temperature"><span>{{ day.Temperature.Maximum.Value }} &deg;{{ day.Temperature.Maximum.Unit }}</span></div>
+                        <div class="temperature"><span>{{ day.Temperature.Maximum.Value }}&deg; {{ day.Temperature.Maximum.Unit }}</span></div>
                         <div class="description">
                             <div class="weatherCondition">{{ day.Day.IconPhrase }}</div>
                         </div>
