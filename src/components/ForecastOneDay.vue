@@ -67,11 +67,6 @@
 
     $border-radius: 20px;
 
-    body {
-        background-color: #A64253;
-        font-family: Poiret One;
-    }
-
     .widget {
 
         .weatherIcon{
