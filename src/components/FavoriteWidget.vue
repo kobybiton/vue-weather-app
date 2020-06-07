@@ -70,6 +70,7 @@
         flex-flow: column wrap;
         box-shadow: 0px 1px 10px 0px #cfcfcf;
         overflow: hidden;
+        margin-bottom: 25px;
     }
 
     .weather .current{
